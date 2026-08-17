@@ -1,0 +1,60 @@
+{
+  "name": "nikki-cli",
+  "version": "1.0.0",
+  "description": "A terminal-first personal notes and reminder app",
+  "main": "dist/cli.js",
+  "type": "module",
+  "bin": {
+    "nikki": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "assets/nikki-fox-mascot.png",
+    "readme.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "dev:daemon": "tsx src/daemon.ts",
+    "build": "tsup",
+    "start": "node dist/cli.js",
+    "start:daemon": "node dist/daemon.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "cli",
+    "notes",
+    "reminders",
+    "terminal",
+    "todo",
+    "productivity",
+    "systemd",
+    "desktop-notifications"
+  ],
+  "author": "Nikhil Gautam",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nikhil-Gautam-dev/nikki.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nikhil-Gautam-dev/nikki/issues"
+  },
+  "homepage": "https://github.com/Nikhil-Gautam-dev/nikki#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "chalk": "^6.0.0",
+    "chrono-node": "^2.10.1",
+    "commander": "^15.0.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.2.0",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2"
+  }
+}
+
