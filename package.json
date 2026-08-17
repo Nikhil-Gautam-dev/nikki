@@ -1,6 +1,6 @@
 {
   "name": "nikki-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A terminal-first personal notes and reminder app",
   "main": "dist/cli.js",
   "type": "module",
@@ -57,4 +57,3 @@
     "typescript": "^7.0.2"
   }
 }
-
