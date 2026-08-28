@@ -478,101 +478,37 @@
       margin: 0.75rem auto 0;
     }
 
-    /* Feature Grid */
-    .grid-3 {
+    /* Grid Utilities */
+    .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
     }
 
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 0.85rem;
-      padding: 1.75rem;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(12px);
-      display: flex;
-      flex-direction: column;
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
-    .feature-card:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-accent);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 122, 0, 0.2);
-    }
-
-    .feature-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 0.6rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .icon-purple { background: rgba(255, 122, 0, 0.16); color: var(--fox-orange); }
-    .icon-pink { background: rgba(244, 63, 94, 0.16); color: var(--sunset-rose); }
-    .icon-amber { background: rgba(255, 189, 89, 0.16); color: var(--fox-amber); }
-    .icon-emerald { background: rgba(16, 185, 129, 0.16); color: var(--emerald-green); }
-    .icon-cyan { background: rgba(6, 182, 212, 0.16); color: var(--cyber-teal); }
-    .icon-indigo { background: rgba(255, 140, 66, 0.16); color: var(--fox-orange-glow); }
-
-    .feature-card h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.6rem;
-      color: var(--text-main);
-    }
-
-    .feature-card p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      flex-grow: 1;
-    }
-
-    /* Code Blocks & Cards */
-    .code-box {
-      background: var(--bg-code);
-      border: 1px solid var(--border-color);
-      border-radius: 0.6rem;
-      padding: 1rem 1.25rem;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      color: var(--fox-cream);
-      position: relative;
-      overflow-x: auto;
-      margin: 1rem 0;
-    }
-
-    .code-box-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      font-family: var(--font-sans);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* Command Reference Accordion / Cards */
+    /* Enhanced Command Reference Section */
     .cmd-group {
-      background: var(--bg-card);
+      background: rgba(20, 13, 8, 0.65);
       border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      margin-bottom: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
       overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      transition: all 0.3s ease;
+    }
+
+    .cmd-group:hover {
+      border-color: rgba(255, 140, 66, 0.28);
     }
 
     .cmd-group-header {
-      padding: 1.25rem 1.5rem;
-      background: rgba(255, 255, 255, 0.02);
+      padding: 1.25rem 1.75rem;
+      background: linear-gradient(90deg, rgba(255, 122, 0, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -583,10 +519,21 @@
 
     .cmd-group-header h3 {
       font-size: 1.15rem;
-      font-weight: 600;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      color: var(--text-main);
+    }
+
+    .cmd-badge-count {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      background: rgba(255, 122, 0, 0.15);
+      color: var(--fox-amber);
+      padding: 0.2rem 0.65rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 122, 0, 0.3);
     }
 
     .cmd-group-header i.chevron {
@@ -600,190 +547,389 @@
 
     .cmd-group-body {
       padding: 1.5rem;
-      display: block;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
     }
 
     .cmd-group.collapsed .cmd-group-body {
       display: none;
     }
 
-    .cmd-item {
-      margin-bottom: 1.5rem;
+    .cmd-card {
+      background: rgba(26, 17, 11, 0.85);
+      border: 1px solid rgba(255, 140, 66, 0.16);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
     }
 
-    .cmd-item:last-child {
-      margin-bottom: 0;
+    .cmd-card:hover {
+      background: rgba(38, 24, 15, 0.95);
+      border-color: var(--border-accent);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 122, 0, 0.15);
+    }
+
+    .cmd-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     .cmd-name {
       font-family: var(--font-mono);
       font-size: 0.95rem;
+      font-weight: 700;
       color: var(--cyber-cyan);
+      line-height: 1.4;
+    }
+
+    .cmd-tag {
+      font-size: 0.7rem;
       font-weight: 600;
-      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.55rem;
+      border-radius: 0.35rem;
+      white-space: nowrap;
+      background: rgba(6, 182, 212, 0.12);
+      color: var(--cyber-teal);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+    }
+
+    .cmd-tag.tag-orange {
+      background: rgba(255, 122, 0, 0.12);
+      color: var(--fox-orange);
+      border-color: rgba(255, 122, 0, 0.3);
+    }
+
+    .cmd-tag.tag-amber {
+      background: rgba(255, 189, 89, 0.12);
+      color: var(--fox-amber);
+      border-color: rgba(255, 189, 89, 0.3);
+    }
+
+    .cmd-tag.tag-green {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--emerald-green);
+      border-color: rgba(16, 185, 129, 0.3);
     }
 
     .cmd-desc {
-      font-size: 0.9rem;
+      font-size: 0.875rem;
       color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-
-    /* Architecture Flow */
-    .flow-container {
-      background: var(--bg-code);
-      border: 1px solid var(--border-color);
-      border-radius: 0.75rem;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .flow-step {
-      background: rgba(38, 25, 15, 0.85);
-      border: 1px solid var(--border-accent);
-      border-radius: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      color: #fff7ed;
-      text-align: center;
-      min-width: 240px;
-    }
-
-    .flow-arrow {
-      color: var(--fox-orange);
-      font-size: 1.2rem;
-    }
-
-    /* Tech Table */
-    .tech-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      background: var(--bg-card);
-      border-radius: 0.75rem;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .tech-table th, .tech-table td {
-      padding: 0.85rem 1.25rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .tech-table th {
-      background: rgba(255, 255, 255, 0.03);
-      font-weight: 600;
-      color: var(--text-main);
-      font-size: 0.9rem;
-    }
-
-    .tech-table td {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .tech-table td.tech-name {
-      font-family: var(--font-mono);
-      color: var(--fox-orange);
-      font-weight: 600;
-    }
-
-    /* Roadmap Checklist */
-    .roadmap-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-
-    .roadmap-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 0.6rem;
-      padding: 0.85rem 1.15rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .roadmap-item i {
-      color: var(--text-dim);
-    }
-
-    /* Footer */
-    footer {
-      background: #080503;
-      border-top: 1px solid var(--border-color);
-      padding: 3.5rem 0 2rem;
-      color: var(--text-dim);
-      font-size: 0.9rem;
-    }
-
-    .footer-content {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .footer-brand {
-      max-width: 360px;
-    }
-
-    .footer-brand p {
-      margin-top: 0.75rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .footer-links-group h4 {
-      color: var(--text-main);
-      font-size: 0.95rem;
-      font-weight: 600;
       margin-bottom: 1rem;
+      line-height: 1.5;
     }
 
-    .footer-links-group ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    .cmd-desc code {
+      font-family: var(--font-mono);
+      color: var(--fox-cream);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.1rem 0.4rem;
+      border-radius: 0.25rem;
+      font-size: 0.825rem;
     }
 
-    .footer-links-group a {
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .footer-links-group a:hover {
-      color: var(--fox-orange);
-    }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding-top: 1.5rem;
+    .cmd-snippet {
+      background: #0d0805;
+      border: 1px solid rgba(255, 140, 66, 0.2);
+      border-radius: 0.5rem;
+      padding: 0.65rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--fox-cream);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .cmd-snippet-code {
+      overflow-x: auto;
+      white-space: nowrap;
+      color: var(--cyber-cyan);
+    }
+
+    .cmd-snippet-code .prompt-symbol {
+      color: var(--fox-orange);
+      margin-right: 0.4rem;
+    }
+
+    .snippet-copy-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.3rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .snippet-copy-btn:hover {
+      background: var(--fox-orange);
+      border-color: var(--fox-orange);
+      color: #fff;
+    }
+
+    .snippet-copy-btn.copied {
+      background: var(--emerald-green) !important;
+      border-color: var(--emerald-green) !important;
+      color: #fff !important;
+    }
+
+    /* Mobile Navigation Toggle Button */
+    .mobile-toggle {
+      display: none;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-toggle:hover {
+      background: rgba(255, 122, 0, 0.2);
+      border-color: var(--fox-orange);
+      color: var(--fox-orange);
+    }
+
+    .mobile-search-li {
+      display: none;
+      width: 100%;
+    }
+
+    .terminal-top-row {
+      display: flex;
+      align-items: center;
       gap: 1rem;
     }
 
-    /* Responsive */
+    /* Responsive Media Queries */
+    @media (max-width: 992px) {
+      .terminal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .terminal-top-row {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .terminal-controls {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 0.25rem;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .demo-pill {
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+    }
+
     @media (max-width: 768px) {
-      .hero-title { font-size: 2.5rem; }
-      .hero-slogan { font-size: 1.15rem; }
-      .nav-links { display: none; }
-      .doc-search-box { display: none; }
+      .container {
+        padding: 0 1rem;
+      }
+
+      .nav-container {
+        height: 3.75rem;
+        gap: 0.75rem;
+        position: relative;
+      }
+
+      .brand {
+        font-size: 1.15rem;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 34px;
+      }
+
+      .mobile-toggle {
+        display: flex;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: -1rem;
+        right: -1rem;
+        background: rgba(12, 8, 5, 0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-accent);
+        flex-direction: column;
+        padding: 1.25rem 1.5rem;
+        gap: 1rem;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.85);
+        z-index: 999;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .mobile-search-li {
+        display: block;
+      }
+
+      .doc-search-box {
+        display: none;
+      }
+
+      .doc-search-box.mobile-search {
+        display: block;
+        width: 100%;
+      }
+
+      .doc-search-box.mobile-search input {
+        width: 100% !important;
+      }
+
+      .nav-actions {
+        gap: 0.5rem;
+      }
+
+      .btn {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.8rem;
+        height: auto;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 3rem 0 2.5rem;
+      }
+
+      .hero-title {
+        font-size: 2.25rem;
+      }
+
+      .hero-slogan {
+        font-size: 1.05rem;
+      }
+
+      .hero-install-box {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.85rem 1rem;
+        align-items: stretch;
+      }
+
+      .hero-install-code {
+        font-size: 0.875rem;
+        word-break: break-all;
+        justify-content: center;
+      }
+
+      .copy-btn {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .cmd-name {
+        word-break: break-word;
+      }
+
+      .cmd-group-header {
+        padding: 1rem 1.15rem;
+      }
+
+      .cmd-group-header h3 {
+        font-size: 1rem;
+      }
+
+      .cmd-group-body {
+        padding: 1.15rem;
+      }
+
+      .tech-table th, .tech-table td {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.825rem;
+      }
+
+      .flow-container {
+        padding: 1.25rem 1rem;
+      }
+
+      .flow-step {
+        min-width: 0;
+        width: 100%;
+        font-size: 0.825rem;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 1.85rem;
+      }
+
+      .hero-badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.85rem;
+      }
+
+      .btn-text-extra {
+        display: none;
+      }
+
+      .cmd-name {
+        font-size: 0.875rem;
+      }
+
+      .code-box {
+        font-size: 0.8rem;
+        padding: 0.75rem 0.85rem;
+      }
+
+      .terminal-body {
+        padding: 1rem;
+        font-size: 0.825rem;
+      }
     }
   </style>
 </head>
@@ -797,26 +943,35 @@
         <span>Nikki</span>
       </a>
 
-      <ul class="nav-links">
+      <ul class="nav-links" id="navLinks">
         <li><a href="#features">Features</a></li>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#commands">Commands</a></li>
         <li><a href="#daemon">Daemon</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#roadmap">Roadmap</a></li>
+        <li class="mobile-search-li">
+          <div class="doc-search-box mobile-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="docSearchMobile" placeholder="Search docs..." oninput="filterDocs(this.value)">
+          </div>
+        </li>
       </ul>
 
       <div class="nav-actions">
         <div class="doc-search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="docSearch" placeholder="Search docs..." oninput="filterDocs()">
+          <input type="text" id="docSearch" placeholder="Search docs..." oninput="filterDocs(this.value)">
         </div>
         <a href="https://github.com/Nikhil-Gautam-dev/nikki" target="_blank" class="btn btn-secondary">
-          <i class="fa-brands fa-github"></i> GitHub
+          <i class="fa-brands fa-github"></i> <span class="btn-text-extra">GitHub</span>
         </a>
         <a href="https://www.npmjs.com/package/nikki-cli" target="_blank" class="btn btn-primary">
-          <i class="fa-brands fa-npm"></i> npm v1.0.1
+          <i class="fa-brands fa-npm"></i> <span class="btn-text-extra">npm v1.0.1</span>
         </a>
+        <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
     </div>
   </header>
@@ -844,13 +999,15 @@
       <!-- Live Interactive Terminal Demo -->
       <div class="terminal-window">
         <div class="terminal-header">
-          <div class="terminal-dots">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-yellow"></span>
-            <span class="dot dot-green"></span>
-          </div>
-          <div class="terminal-title">
-            <i class="fa-solid fa-terminal"></i> nikki-cli demo — zsh
+          <div class="terminal-top-row">
+            <div class="terminal-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="terminal-title">
+              <i class="fa-solid fa-terminal"></i> nikki-cli demo — zsh
+            </div>
           </div>
           <div class="terminal-controls">
             <button class="demo-pill active" onclick="runDemo('note', this)">Quick Note</button>
@@ -926,7 +1083,7 @@
         <h2 class="section-title">Requirements & Installation</h2>
       </div>
 
-      <div class="grid-3" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
+      <div class="grid-2" style="margin-bottom: 2rem;">
         <div class="feature-card">
           <h3><i class="fa-solid fa-list-check" style="color: var(--fox-orange); margin-right: 0.5rem;"></i> System Requirements</h3>
           <ul style="list-style: none; margin-top: 1rem; color: var(--text-muted); font-size: 0.95rem;">
@@ -971,171 +1128,300 @@
       <div class="section-title-wrap">
         <div class="section-subtitle">Documentation</div>
         <h2 class="section-title">Complete Command Reference</h2>
-        <p class="section-desc">Search or browse every CLI command available in Nikki.</p>
+        <p class="section-desc">Search or browse every CLI command available in Nikki with executable snippets.</p>
       </div>
 
       <!-- Command Group: Notes -->
       <div class="cmd-group searchable-item" data-keywords="add note create list search show edit delete title">
         <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
-          <h3><i class="fa-solid fa-sticky-note" style="color: var(--fox-orange);"></i> Notes Management</h3>
+          <h3>
+            <i class="fa-solid fa-sticky-note" style="color: var(--fox-orange);"></i> Notes Management
+            <span class="cmd-badge-count">7 commands</span>
+          </h3>
           <i class="fa-solid fa-chevron-down chevron"></i>
         </div>
         <div class="cmd-group-body">
-          <div class="cmd-item">
-            <div class="cmd-name">nikki &lt;content&gt; | nikki add &lt;content&gt; [-t &lt;title&gt;]</div>
-            <div class="cmd-desc">Capture a new note instantly. Optionally attach a title with <code>--title</code> / <code>-t</code> (title is always optional).</div>
-            <div class="code-box">nikki "learn how systemd user services work"<br>nikki "meeting decisions" --title "Q3 Planning" --remind "tomorrow 9am"</div>
+
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki &lt;content&gt; | nikki add</div>
+                <span class="cmd-tag tag-orange">Primary</span>
+              </div>
+              <div class="cmd-desc">Capture a new note instantly from your shell. Optionally attach a title with <code>-t</code> or a reminder with <code>-r</code>.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki "learn systemd" -t "DevOps"</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki &quot;learn systemd&quot; -t &quot;DevOps&quot;', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki title &lt;id&gt; [title]</div>
-            <div class="cmd-desc">Set or update the title of an existing note. Omit the title argument to clear it. You can also add a title to notes created before this feature.</div>
-            <div class="code-box">nikki title 14 "My Meeting Notes"<br>nikki title 14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# clears title</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki title &lt;id&gt; [title]</div>
+                <span class="cmd-tag tag-amber">New</span>
+              </div>
+              <div class="cmd-desc">Set or update the title of an existing note. Omit the title argument to clear it.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki title 14 "Q3 Planning"</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki title 14 &quot;Q3 Planning&quot;', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki list [--limit &lt;number&gt;] [-n &lt;number&gt;]</div>
-            <div class="cmd-desc">List recent notes (shows top 20 by default). Titles are displayed inline when present.</div>
-            <div class="code-box">nikki list -n 50</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki list [-n &lt;limit&gt;]</div>
+                <span class="cmd-tag">Query</span>
+              </div>
+              <div class="cmd-desc">List recent notes (shows top 20 by default). Displays titles inline next to note ID.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki list -n 50</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki list -n 50', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki search &lt;query&gt;</div>
-            <div class="cmd-desc">Full-text search across both note content <strong>and titles</strong> in SQLite.</div>
-            <div class="code-box">nikki search mongodb<br>nikki search "Q3 Planning"</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki search &lt;query&gt;</div>
+                <span class="cmd-tag">Search</span>
+              </div>
+              <div class="cmd-desc">Perform full-text search matching across both note content <strong>and titles</strong> in SQLite.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki search "DevOps"</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki search &quot;DevOps&quot;', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki show &lt;id&gt;</div>
-            <div class="cmd-desc">View full details and creation timestamps for a specific note ID. Title is shown prominently when set.</div>
-            <div class="code-box">nikki show 14</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki show &lt;id&gt;</div>
+                <span class="cmd-tag">Inspect</span>
+              </div>
+              <div class="cmd-desc">View full details and creation/update timestamps for a specific note ID.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki show 14</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki show 14', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki edit &lt;id&gt;</div>
-            <div class="cmd-desc">Open note content in your system <code>$EDITOR</code> (Neovim, Vim, VS Code, etc.). Use <code>nikki title</code> separately to edit the title.</div>
-            <div class="code-box">export EDITOR=nvim<br>nikki edit 14</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki edit &lt;id&gt;</div>
+                <span class="cmd-tag">Editor</span>
+              </div>
+              <div class="cmd-desc">Open note content directly in your system <code>$EDITOR</code> (Neovim, Vim, VS Code, etc.).</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki edit 14</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki edit 14', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki delete &lt;id&gt;</div>
-            <div class="cmd-desc">Delete a note with y/N confirmation prompt.</div>
-            <div class="code-box">nikki delete 14</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki delete &lt;id&gt;</div>
+                <span class="cmd-tag tag-amber">Safety</span>
+              </div>
+              <div class="cmd-desc">Delete a note permanently with an interactive <code>[y/N]</code> confirmation prompt.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki delete 14</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki delete 14', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
+
         </div>
       </div>
 
       <!-- Command Group: Reminders -->
       <div class="cmd-group searchable-item" data-keywords="remind reminder at complete time natural language">
         <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
-          <h3><i class="fa-solid fa-bell" style="color: var(--sunset-rose);"></i> Reminders & Dates</h3>
+          <h3>
+            <i class="fa-solid fa-bell" style="color: var(--sunset-rose);"></i> Reminders & Dates
+            <span class="cmd-badge-count">4 commands</span>
+          </h3>
           <i class="fa-solid fa-chevron-down chevron"></i>
         </div>
         <div class="cmd-group-body">
-          <div class="cmd-item">
-            <div class="cmd-name">nikki "&lt;content&gt;" --remind "&lt;time&gt;" | -r "&lt;time&gt;"</div>
-            <div class="cmd-desc">Create a note and attach a natural language reminder simultaneously.</div>
-            <div class="code-box">nikki "check VPS prices" --remind "tomorrow 10am"</div>
+
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki "&lt;content&gt;" -r "&lt;time&gt;"</div>
+                <span class="cmd-tag tag-orange">Inline</span>
+              </div>
+              <div class="cmd-desc">Create a note and set a natural language reminder in one shot (e.g. <code>"tomorrow 10am"</code>).</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki "check VPS" -r "tomorrow 10am"</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki &quot;check VPS&quot; -r &quot;tomorrow 10am&quot;', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki remind &lt;noteId&gt; --at "&lt;time&gt;"</div>
-            <div class="cmd-desc">Attach a reminder to an existing note ID.</div>
-            <div class="code-box">nikki remind 14 --at "in 2 hours"</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki remind &lt;noteId&gt; --at "&lt;time&gt;"</div>
+                <span class="cmd-tag">Attach</span>
+              </div>
+              <div class="cmd-desc">Attach a reminder to an existing note ID using natural date parsing.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki remind 14 --at "in 2 hours"</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki remind 14 --at &quot;in 2 hours&quot;', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki reminders</div>
-            <div class="cmd-desc">List all pending upcoming reminders sorted chronologically.</div>
-            <div class="code-box">nikki reminders</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki reminders</div>
+                <span class="cmd-tag">List</span>
+              </div>
+              <div class="cmd-desc">List all pending upcoming reminders sorted chronologically by target time.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki reminders</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki reminders', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki complete-reminder &lt;id&gt;</div>
-            <div class="cmd-desc">Mark a pending reminder as completed manually.</div>
-            <div class="code-box">nikki complete-reminder 4</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki complete-reminder &lt;id&gt;</div>
+                <span class="cmd-tag tag-green">Done</span>
+              </div>
+              <div class="cmd-desc">Mark a pending reminder as completed manually.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki complete-reminder 4</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki complete-reminder 4', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-desc" style="font-weight: 600; color: var(--text-main); margin-top: 1rem;">Natural Language Date Examples Supported:</div>
-            <ul style="list-style: disc; margin-left: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
-              <code>"tomorrow 10am"</code> | <code>"in 2 hours"</code> | <code>"in 30 minutes"</code> | <code>"friday 5pm"</code> | <code>"next monday 9am"</code> | <code>"September 1 at 10am"</code>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Command Group: Daily Summary -->
-      <div class="cmd-group searchable-item" data-keywords="today summary daily dashboard">
-        <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
-          <h3><i class="fa-solid fa-calendar-check" style="color: var(--fox-amber);"></i> Daily Summary (nikki today)</h3>
-          <i class="fa-solid fa-chevron-down chevron"></i>
-        </div>
-        <div class="cmd-group-body">
-          <div class="cmd-item">
-            <div class="cmd-name">nikki today</div>
-            <div class="cmd-desc">Displays a consolidated daily dashboard overview of notes created and reminders scheduled for today.</div>
-            <div class="code-box">nikki today</div>
-          </div>
         </div>
       </div>
 
       <!-- Command Group: Date Navigation -->
-      <div class="cmd-group searchable-item" data-keywords="yesterday tomorrow date nlp natural language navigation day week">
+      <div class="cmd-group searchable-item" data-keywords="today yesterday tomorrow date nlp natural language navigation day week">
         <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
-          <h3><i class="fa-solid fa-calendar-days" style="color: var(--cyber-teal);"></i> Date Navigation</h3>
+          <h3>
+            <i class="fa-solid fa-calendar-days" style="color: var(--fox-amber);"></i> Daily Summary & Date Navigation
+            <span class="cmd-badge-count">4 commands</span>
+          </h3>
           <i class="fa-solid fa-chevron-down chevron"></i>
         </div>
         <div class="cmd-group-body">
-          <div class="cmd-item">
-            <div class="cmd-name">nikki yesterday</div>
-            <div class="cmd-desc">Show yesterday's notes and reminders in the same rich summary format as <code>nikki today</code>.</div>
-            <div class="code-box">nikki yesterday</div>
+
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki today</div>
+                <span class="cmd-tag tag-amber">Dashboard</span>
+              </div>
+              <div class="cmd-desc">Displays a consolidated daily dashboard overview of notes created and reminders scheduled for today.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki today</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki today', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki tomorrow</div>
-            <div class="cmd-desc">Show tomorrow's notes and upcoming reminders.</div>
-            <div class="code-box">nikki tomorrow</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki yesterday</div>
+                <span class="cmd-tag tag-green">New</span>
+              </div>
+              <div class="cmd-desc">Show yesterday's notes and reminders in the same rich summary dashboard view.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki yesterday</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki yesterday', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki date &lt;when&gt;</div>
-            <div class="cmd-desc">Show notes and reminders for any calendar day using <strong>natural language date parsing</strong> powered by <code>chrono-node</code>. Works with past and future dates.</div>
-            <div class="code-box">nikki date "last friday"<br>nikki date "next monday"<br>nikki date "Aug 25"<br>nikki date "2 days ago"</div>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki tomorrow</div>
+                <span class="cmd-tag tag-green">New</span>
+              </div>
+              <div class="cmd-desc">Show tomorrow's scheduled notes and upcoming reminders.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki tomorrow</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki tomorrow', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
 
-          <div class="cmd-item">
-            <div class="cmd-desc" style="font-weight: 600; color: var(--text-main); margin-top: 1rem;">Natural Language Date Examples Supported:</div>
-            <ul style="list-style: disc; margin-left: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
-              <code>"yesterday"</code> | <code>"tomorrow"</code> | <code>"last friday"</code> | <code>"next monday"</code> | <code>"2 days ago"</code> | <code>"Aug 25"</code> | <code>"September 1"</code>
-            </ul>
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki date &lt;when&gt;</div>
+                <span class="cmd-tag tag-green">NLP</span>
+              </div>
+              <div class="cmd-desc">Show notes and reminders for any date using natural language parsing (<code>"last friday"</code>, <code>"Aug 25"</code>).</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki date "last friday"</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki date &quot;last friday&quot;', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
           </div>
+
         </div>
       </div>
 
       <!-- Command Group: Daemon -->
       <div class="cmd-group searchable-item" data-keywords="daemon systemd install start stop status restart logs service">
         <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
-          <h3><i class="fa-solid fa-gears" style="color: var(--cyber-teal);"></i> Systemd Daemon Management</h3>
+          <h3>
+            <i class="fa-solid fa-gears" style="color: var(--cyber-teal);"></i> Systemd Daemon Management
+            <span class="cmd-badge-count">2 commands</span>
+          </h3>
           <i class="fa-solid fa-chevron-down chevron"></i>
         </div>
         <div class="cmd-group-body">
-          <div class="cmd-item">
-            <div class="cmd-name">nikki daemon install</div>
-            <div class="cmd-desc">Automatically creates systemd user unit, enables it, and starts background polling.</div>
-            <div class="code-box">nikki daemon install</div>
-          </div>
 
-          <div class="cmd-item">
-            <div class="cmd-name">nikki daemon status | start | stop | restart | uninstall</div>
-            <div class="cmd-desc">Manage background reminder daemon execution cleanly without raw systemctl commands.</div>
-            <div class="code-box">
-              nikki daemon status<br>
-              nikki daemon restart<br>
-              journalctl --user -u note-daemon -f
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki daemon install</div>
+                <span class="cmd-tag tag-orange">Setup</span>
+              </div>
+              <div class="cmd-desc">Automatically creates a systemd user unit service, enables it, and starts background polling.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki daemon install</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki daemon install', this)"><i class="fa-regular fa-copy"></i> Copy</button>
             </div>
           </div>
+
+          <div class="cmd-card">
+            <div>
+              <div class="cmd-card-header">
+                <div class="cmd-name">nikki daemon status | start | stop</div>
+                <span class="cmd-tag">Control</span>
+              </div>
+              <div class="cmd-desc">Manage background reminder daemon status and execution cleanly without raw systemctl commands.</div>
+            </div>
+            <div class="cmd-snippet">
+              <div class="cmd-snippet-code"><span class="prompt-symbol">$</span>nikki daemon status</div>
+              <button class="snippet-copy-btn" onclick="copyToClipboard('nikki daemon status', this)"><i class="fa-regular fa-copy"></i> Copy</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1171,7 +1457,7 @@
         <h2 class="section-title">Tech Stack & Project Structure</h2>
       </div>
 
-      <div class="grid-3" style="grid-template-columns: 1fr 1fr;">
+      <div class="grid-2">
         <div>
           <h3 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--text-main);">Technology Stack</h3>
           <table class="tech-table">
@@ -1373,9 +1659,37 @@
       group.classList.toggle('collapsed');
     }
 
+    // Toggle Mobile Navigation Menu
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      const toggleBtn = document.getElementById('mobileToggle');
+      const icon = toggleBtn.querySelector('i');
+      
+      navLinks.classList.toggle('active');
+      if (navLinks.classList.contains('active')) {
+        icon.className = 'fa-solid fa-xmark';
+      } else {
+        icon.className = 'fa-solid fa-bars';
+      }
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        const navLinks = document.getElementById('navLinks');
+        const toggleBtn = document.getElementById('mobileToggle');
+        if (navLinks && navLinks.classList.contains('active')) {
+          navLinks.classList.remove('active');
+          if (toggleBtn) {
+            toggleBtn.querySelector('i').className = 'fa-solid fa-bars';
+          }
+        }
+      });
+    });
+
     // Search Documentation Filter
-    function filterDocs() {
-      const query = document.getElementById('docSearch').value.toLowerCase().trim();
+    function filterDocs(val) {
+      const query = (val !== undefined ? val : document.getElementById('docSearch').value).toLowerCase().trim();
       const items = document.querySelectorAll('.searchable-item');
 
       items.forEach(item => {

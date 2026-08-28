@@ -13,14 +13,15 @@ Nikki lets you quickly capture notes from the terminal, search and edit them, at
 ## Features
 
 - ⚡ Instant note capture from the terminal
-- 📝 Create and edit notes
-- 🔎 Search notes
+- 📝 Create, edit, and delete notes
+- 🏷️ Optional note titles with full-text title search
+- 🔎 Search notes by content or title
 - 📖 View individual notes
-- 🗑️ Delete notes
 - ⏰ Create reminders using natural language
 - 🔔 Desktop notifications
 - 🤖 Background reminder daemon
 - 📅 Daily summary with `nikki today`
+- 📆 Navigate any day — `nikki yesterday`, `nikki tomorrow`, `nikki date "last friday"`
 - 🐧 Linux/systemd user-service integration
 - 💾 Local SQLite database
 - 📴 No server or internet connection required
@@ -554,6 +555,113 @@ This is intended to become the main daily overview for Nikki.
 
 ---
 
+# Note Titles
+
+You can optionally attach a title to any note.
+
+## Create a note with a title
+
+```bash
+nikki "Migrate Postgres to RDS" --title "DevOps"
+# short form:
+nikki "Migrate Postgres to RDS" -t "DevOps"
+```
+
+Output:
+
+```text
+✓ Note created #5
+  Title: DevOps
+```
+
+## Set or update a title on an existing note
+
+```bash
+nikki title 14 "Q3 Planning"
+```
+
+Output:
+
+```text
+✓ Title set for note #14: "Q3 Planning"
+```
+
+## Clear a title
+
+Omit the title argument to clear it:
+
+```bash
+nikki title 14
+```
+
+Output:
+
+```text
+✓ Title cleared for note #14.
+```
+
+## Searching by title
+
+`nikki search` automatically searches both **content and titles**:
+
+```bash
+nikki search "Q3 Planning"
+```
+
+Example:
+
+```text
+#14 Q3 Planning — Meeting decisions for next quarter
+#5  DevOps — Migrate Postgres to RDS
+```
+
+---
+
+# Date Navigation
+
+You can view notes and reminders for any day — not just today.
+
+## Yesterday
+
+```bash
+nikki yesterday
+```
+
+## Tomorrow
+
+```bash
+nikki tomorrow
+```
+
+## Any date using natural language
+
+```bash
+nikki date "last friday"
+nikki date "next monday"
+nikki date "Aug 25"
+nikki date "2 days ago"
+nikki date "September 1"
+```
+
+Example output:
+
+```text
+last friday · Friday, August 22, 2026
+──────────────────────────────────────────────────
+
+Notes · 2
+10:00  #9  DevOps — Migrate Postgres to RDS
+15:30  #10 systemd socket activation notes
+
+Reminders · 1
+  17:00  Submit weekly report
+
+──────────────────────────────────────────────────
+2 notes · 1 reminder
+```
+
+---
+
 # Reminder Daemon
 
 The reminder daemon is responsible for checking SQLite for due reminders and sending desktop notifications.
@@ -888,11 +996,16 @@ npm run build
 ```bash
 nikki "note"
 nikki add "note"
+nikki add "note" --title "My Title"   # with optional title
+nikki add "note" -t "My Title"         # short form
+
+nikki title <id> "New Title"           # set/update title
+nikki title <id>                       # clear title
 
 nikki list
 nikki list --limit 50
 
-nikki search <query>
+nikki search <query>                   # searches content AND titles
 
 nikki show <id>
 
@@ -915,10 +1028,15 @@ nikki reminders
 nikki complete-reminder <reminder-id>
 ```
 
-## Daily
+## Daily & Date Navigation
 
 ```bash
 nikki today
+nikki yesterday
+nikki tomorrow
+nikki date "last friday"
+nikki date "next monday"
+nikki date "Aug 25"
 ```
 
 ## Daemon
@@ -1091,8 +1209,9 @@ Potential future features:
 - [ ] Tags
 - [ ] Note linking
 - [ ] Daily/weekly summaries
-- [ ] `nikki yesterday`
-- [ ] `nikki tomorrow`
+- [x] `nikki yesterday`
+- [x] `nikki tomorrow`
+- [x] `nikki date <nlp>` — natural language date navigation
 - [ ] Recurring reminders
 - [ ] Snooze reminders
 - [ ] Notification actions such as `Done` and `Snooze`
