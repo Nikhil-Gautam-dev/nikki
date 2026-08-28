@@ -6,17 +6,20 @@ import {
   deleteNote,
   getNoteById,
   getNotes,
+  getNotesForDay,
   getTodayNotes,
   searchNotes,
   updateNote,
+  updateNoteTitle,
 } from "./services/note.service.js";
 import { openEditor } from "./utils/editor.js";
-import { parseDate } from "chrono-node";
+import { parseDate } from "./utils/date.js";
 import {
   createReminder,
   getUpcomingReminders,
   completeReminder,
   getTodayReminders,
+  getRemindersForDay,
 } from "./services/reminder.service.js";
 import {
   daemonStatus,
@@ -39,6 +42,10 @@ const commands = new Set([
   "reminders",
   "complete-reminder",
   "today",
+  "yesterday",
+  "tomorrow",
+  "date",
+  "title",
   "daemon",
   "help",
   "--help",
@@ -64,10 +71,105 @@ program
   .description("A terminal-first personal notes and reminder app")
   .version(getCurrentVersion());
 
+// ---------------------------------------------------------------------------
+// Helper: format a note's display label (title + content or just content)
+// ---------------------------------------------------------------------------
+function noteLabel(note: { title?: string | null; content: string }): string {
+  if (note.title) {
+    return `${chalk.bold(note.title)} — ${note.content}`;
+  }
+  return note.content;
+}
+
+// ---------------------------------------------------------------------------
+// Helper: render a day summary (shared by today / yesterday / tomorrow / date)
+// ---------------------------------------------------------------------------
+function showDaySummary(date: Date, label?: string): void {
+  const notes = getNotesForDay(date);
+  const reminders = getRemindersForDay(date);
+
+  const now = new Date();
+
+  const dayLabel =
+    label ??
+    date.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+
+  console.log();
+  console.log(chalk.bold(`${dayLabel}`));
+  console.log(chalk.gray("─".repeat(50)));
+  console.log();
+
+  /*
+   * NOTES
+   */
+
+  console.log(chalk.bold(`Notes · ${notes.length}`));
+  console.log();
+
+  if (notes.length === 0) {
+    console.log(chalk.gray("No notes this day."));
+  } else {
+    for (const note of notes) {
+      const time = new Date(note.created_at).toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      console.log(chalk.gray(`${time}  #${note.id}`), noteLabel(note));
+    }
+  }
+
+  console.log();
+
+  /*
+   * REMINDERS
+   */
+
+  console.log(chalk.bold(`Reminders · ${reminders.length}`));
+  console.log();
+
+  if (reminders.length === 0) {
+    console.log(chalk.gray("No reminders this day."));
+  } else {
+    for (const reminder of reminders) {
+      const time = new Date(reminder.remind_at).toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      const status =
+        reminder.status === "completed"
+          ? chalk.green("✓")
+          : new Date(reminder.remind_at) < now
+            ? chalk.yellow("!")
+            : " ";
+
+      console.log(`${status} ${time}`, reminder.content);
+    }
+  }
+
+  console.log();
+  console.log(chalk.gray("─".repeat(50)));
+  console.log(
+    chalk.gray(`${notes.length} notes · ${reminders.length} reminders`),
+  );
+  console.log();
+}
+
+// ---------------------------------------------------------------------------
+// add
+// ---------------------------------------------------------------------------
+
 program
   .command("add")
   .argument("<content>", "Note content")
   .option("-r, --remind <time>", "Set a reminder for this note")
+  .option("-t, --title <title>", "Optional title for the note")
   .description("Create a note")
   .addHelpText(
     "after",
@@ -79,18 +181,22 @@ Examples:
 
   $ nikki "check VPS prices" --remind "tomorrow 10am"
 
-  $ nikki "submit report" -r "friday 5pm"
+  $ nikki "submit report" -r "friday 5pm" --title "Work"
 
   $ nikki "call John" --remind "in 2 hours"
 
-  $ nikki "backup laptop" -r "sunday 9pm"
+  $ nikki "backup laptop" -r "sunday 9pm" -t "Maintenance"
 `,
   )
   .action(async (content: string, options) => {
     try {
-      const note = createNote(content);
+      const note = createNote(content, options.title);
 
       console.log(chalk.green(`✓ Note created #${note.id}`));
+
+      if (note.title) {
+        console.log(chalk.gray(`  Title: ${note.title}`));
+      }
 
       if (options.remind) {
         const remindAt = parseDate(options.remind)!;
@@ -112,21 +218,31 @@ Examples:
     }
   });
 
+// ---------------------------------------------------------------------------
+// list
+// ---------------------------------------------------------------------------
+
 program
   .command("list")
   .description("List recent notes")
-  .action(() => {
-    const notes = getNotes();
+  .option("-n, --limit <number>", "Number of notes to show", "20")
+  .action((options) => {
+    const limit = Number(options.limit) || 20;
+    const notes = getNotes(limit);
 
     for (const note of notes) {
-      console.log(chalk.gray(`#${note.id}`), note.content);
+      console.log(chalk.gray(`#${note.id}`), noteLabel(note));
     }
   });
+
+// ---------------------------------------------------------------------------
+// search
+// ---------------------------------------------------------------------------
 
 program
   .command("search")
   .argument("<query>")
-  .description("Search notes")
+  .description("Search notes by content or title")
   .action((query: string) => {
     const notes = searchNotes(query);
 
@@ -136,9 +252,13 @@ program
     }
 
     for (const note of notes) {
-      console.log(chalk.gray(`#${note.id}`), note.content);
+      console.log(chalk.gray(`#${note.id}`), noteLabel(note));
     }
   });
+
+// ---------------------------------------------------------------------------
+// show
+// ---------------------------------------------------------------------------
 
 program
   .command("show")
@@ -155,6 +275,11 @@ program
 
     console.log();
     console.log(chalk.bold(`# ${note.id}`));
+
+    if (note.title) {
+      console.log(chalk.bold.cyan(note.title));
+    }
+
     console.log("─".repeat(40));
     console.log();
     console.log(note.content);
@@ -162,7 +287,17 @@ program
     console.log(
       chalk.gray(`Created: ${new Date(note.created_at).toLocaleString()}`),
     );
+
+    if (note.updated_at !== note.created_at) {
+      console.log(
+        chalk.gray(`Updated: ${new Date(note.updated_at).toLocaleString()}`),
+      );
+    }
   });
+
+// ---------------------------------------------------------------------------
+// edit
+// ---------------------------------------------------------------------------
 
 program
   .command("edit")
@@ -203,6 +338,56 @@ program
     }
   });
 
+// ---------------------------------------------------------------------------
+// title  — set or clear the title of an existing note
+// ---------------------------------------------------------------------------
+
+program
+  .command("title")
+  .argument("<id>", "Note ID")
+  .argument("[title]", "New title (omit to clear the title)")
+  .description("Set or clear the title of a note")
+  .addHelpText(
+    "after",
+    `
+
+Examples:
+
+  $ nikki title 5 "Meeting Notes"     — set title
+
+  $ nikki title 5                     — clear title
+`,
+  )
+  .action((idString: string, title?: string) => {
+    const id = Number(idString);
+
+    const note = getNoteById(id);
+
+    if (!note) {
+      console.error(chalk.red(`Note #${id} not found.`));
+      process.exitCode = 1;
+      return;
+    }
+
+    const updated = updateNoteTitle(id, title ?? null);
+
+    if (!updated) {
+      console.error(chalk.red(`Failed to update title for note #${id}.`));
+      process.exitCode = 1;
+      return;
+    }
+
+    if (title) {
+      console.log(chalk.green(`✓ Title set for note #${id}: "${title}"`));
+    } else {
+      console.log(chalk.green(`✓ Title cleared for note #${id}.`));
+    }
+  });
+
+// ---------------------------------------------------------------------------
+// delete
+// ---------------------------------------------------------------------------
+
 program
   .command("delete")
   .argument("<id>")
@@ -221,6 +406,10 @@ program
 
     console.log();
     console.log(chalk.yellow(`You are about to delete note #${id}:`));
+
+    if (note.title) {
+      console.log(chalk.gray(`Title:   ${note.title}`));
+    }
 
     console.log(chalk.gray(note.content));
 
@@ -247,6 +436,10 @@ program
       process.exit(0);
     });
   });
+
+// ---------------------------------------------------------------------------
+// remind
+// ---------------------------------------------------------------------------
 
 program
   .command("remind")
@@ -311,6 +504,10 @@ Useful commands:
     }
   });
 
+// ---------------------------------------------------------------------------
+// reminders
+// ---------------------------------------------------------------------------
+
 program
   .command("reminders")
   .description("List upcoming reminders")
@@ -340,6 +537,10 @@ program
     }
   });
 
+// ---------------------------------------------------------------------------
+// complete-reminder
+// ---------------------------------------------------------------------------
+
 program
   .command("complete-reminder")
   .argument("<id>")
@@ -361,96 +562,107 @@ program
     console.log(chalk.green(`✓ Reminder #${id} completed.`));
   });
 
+// ---------------------------------------------------------------------------
+// today
+// ---------------------------------------------------------------------------
+
 program
   .command("today")
   .description("Show today's notes and reminders")
   .action(() => {
-    const notes = getTodayNotes();
-    const reminders = getTodayReminders();
-
     const now = new Date();
-
-    console.log();
-
-    console.log(
-      chalk.bold(
-        `Today · ${now.toLocaleDateString(undefined, {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        })}`,
-      ),
-    );
-
-    console.log(chalk.gray("─".repeat(50)));
-
-    console.log();
-
-    /*
-     * NOTES
-     */
-
-    console.log(chalk.bold(`Notes · ${notes.length}`));
-
-    console.log();
-
-    if (notes.length === 0) {
-      console.log(chalk.gray("No notes today."));
-    } else {
-      for (const note of notes) {
-        const time = new Date(note.created_at).toLocaleTimeString(undefined, {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-
-        console.log(chalk.gray(`${time}  #${note.id}`), note.content);
-      }
-    }
-
-    console.log();
-
-    /*
-     * REMINDERS
-     */
-
-    console.log(chalk.bold(`Reminders · ${reminders.length}`));
-
-    console.log();
-
-    if (reminders.length === 0) {
-      console.log(chalk.gray("No reminders today."));
-    } else {
-      for (const reminder of reminders) {
-        const time = new Date(reminder.remind_at).toLocaleTimeString(
-          undefined,
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          },
-        );
-
-        const status =
-          reminder.status === "completed"
-            ? chalk.green("✓")
-            : new Date(reminder.remind_at) < now
-              ? chalk.yellow("!")
-              : " ";
-
-        console.log(`${status} ${time}`, reminder.content);
-      }
-    }
-
-    console.log();
-
-    console.log(chalk.gray("─".repeat(50)));
-
-    console.log(
-      chalk.gray(`${notes.length} notes · ${reminders.length} reminders`),
-    );
-
-    console.log();
+    const label = `Today · ${now.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })}`;
+    showDaySummary(now, label);
   });
+
+// ---------------------------------------------------------------------------
+// yesterday
+// ---------------------------------------------------------------------------
+
+program
+  .command("yesterday")
+  .description("Show yesterday's notes and reminders")
+  .action(() => {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const label = `Yesterday · ${yesterday.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })}`;
+    showDaySummary(yesterday, label);
+  });
+
+// ---------------------------------------------------------------------------
+// tomorrow
+// ---------------------------------------------------------------------------
+
+program
+  .command("tomorrow")
+  .description("Show tomorrow's notes and reminders")
+  .action(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const label = `Tomorrow · ${tomorrow.toLocaleDateString(undefined, {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })}`;
+    showDaySummary(tomorrow, label);
+  });
+
+// ---------------------------------------------------------------------------
+// date  — NLP date navigation
+// ---------------------------------------------------------------------------
+
+program
+  .command("date")
+  .argument("<when>", 'Natural language date, e.g. "last friday" or "Aug 25"')
+  .description("Show notes and reminders for any date (supports natural language)")
+  .addHelpText(
+    "after",
+    `
+
+Examples:
+
+  $ nikki date "last friday"
+  $ nikki date "next monday"
+  $ nikki date "Aug 25"
+  $ nikki date "2 days ago"
+`,
+  )
+  .action((when: string) => {
+    // Use chrono without forwardDate so past dates ("last friday", "2 days ago") resolve correctly
+    import("chrono-node").then((chrono) => {
+      const result = chrono.parseDate(when, new Date());
+
+      if (!result) {
+        console.error(chalk.red(`Could not understand date: "${when}"`));
+        process.exitCode = 1;
+        return;
+      }
+
+      const label = `${when} · ${result.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })}`;
+
+      showDaySummary(result, label);
+    });
+  });
+
+// ---------------------------------------------------------------------------
+// daemon
+// ---------------------------------------------------------------------------
 
 const daemonCommand = program
   .command("daemon")

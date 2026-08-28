@@ -118,6 +118,7 @@
       justify-content: space-between;
       height: 4.25rem;
       gap:1.5rem;
+      max-width: none;
     }
 
     .brand {
@@ -340,7 +341,6 @@
 
     /* Terminal Demo Window */
     .terminal-window {
-      max-width: 900px;
       margin: 0 auto;
       background: #110a07;
       border: 1px solid var(--border-accent);
@@ -855,7 +855,9 @@
           <div class="terminal-controls">
             <button class="demo-pill active" onclick="runDemo('note', this)">Quick Note</button>
             <button class="demo-pill" onclick="runDemo('remind', this)">Reminder</button>
+            <button class="demo-pill" onclick="runDemo('title', this)">Title</button>
             <button class="demo-pill" onclick="runDemo('today', this)">nikki today</button>
+            <button class="demo-pill" onclick="runDemo('yesterday', this)">yesterday</button>
             <button class="demo-pill" onclick="runDemo('daemon', this)">Daemon</button>
           </div>
         </div>
@@ -973,39 +975,45 @@
       </div>
 
       <!-- Command Group: Notes -->
-      <div class="cmd-group searchable-item" data-keywords="add note create list search show edit delete">
+      <div class="cmd-group searchable-item" data-keywords="add note create list search show edit delete title">
         <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
           <h3><i class="fa-solid fa-sticky-note" style="color: var(--fox-orange);"></i> Notes Management</h3>
           <i class="fa-solid fa-chevron-down chevron"></i>
         </div>
         <div class="cmd-group-body">
           <div class="cmd-item">
-            <div class="cmd-name">nikki &lt;content&gt; | nikki add &lt;content&gt;</div>
-            <div class="cmd-desc">Capture a new note instantly without needing extra flags.</div>
-            <div class="code-box">nikki "learn how systemd user services work"</div>
+            <div class="cmd-name">nikki &lt;content&gt; | nikki add &lt;content&gt; [-t &lt;title&gt;]</div>
+            <div class="cmd-desc">Capture a new note instantly. Optionally attach a title with <code>--title</code> / <code>-t</code> (title is always optional).</div>
+            <div class="code-box">nikki "learn how systemd user services work"<br>nikki "meeting decisions" --title "Q3 Planning" --remind "tomorrow 9am"</div>
+          </div>
+
+          <div class="cmd-item">
+            <div class="cmd-name">nikki title &lt;id&gt; [title]</div>
+            <div class="cmd-desc">Set or update the title of an existing note. Omit the title argument to clear it. You can also add a title to notes created before this feature.</div>
+            <div class="code-box">nikki title 14 "My Meeting Notes"<br>nikki title 14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# clears title</div>
           </div>
 
           <div class="cmd-item">
             <div class="cmd-name">nikki list [--limit &lt;number&gt;] [-n &lt;number&gt;]</div>
-            <div class="cmd-desc">List recent notes (shows top 20 by default).</div>
+            <div class="cmd-desc">List recent notes (shows top 20 by default). Titles are displayed inline when present.</div>
             <div class="code-box">nikki list -n 50</div>
           </div>
 
           <div class="cmd-item">
             <div class="cmd-name">nikki search &lt;query&gt;</div>
-            <div class="cmd-desc">Perform full search across all local notes in SQLite.</div>
-            <div class="code-box">nikki search mongodb</div>
+            <div class="cmd-desc">Full-text search across both note content <strong>and titles</strong> in SQLite.</div>
+            <div class="code-box">nikki search mongodb<br>nikki search "Q3 Planning"</div>
           </div>
 
           <div class="cmd-item">
             <div class="cmd-name">nikki show &lt;id&gt;</div>
-            <div class="cmd-desc">View full details and creation timestamps for a specific note ID.</div>
+            <div class="cmd-desc">View full details and creation timestamps for a specific note ID. Title is shown prominently when set.</div>
             <div class="code-box">nikki show 14</div>
           </div>
 
           <div class="cmd-item">
             <div class="cmd-name">nikki edit &lt;id&gt;</div>
-            <div class="cmd-desc">Open note in your system <code>$EDITOR</code> (Neovim, Vim, VS Code, etc.).</div>
+            <div class="cmd-desc">Open note content in your system <code>$EDITOR</code> (Neovim, Vim, VS Code, etc.). Use <code>nikki title</code> separately to edit the title.</div>
             <div class="code-box">export EDITOR=nvim<br>nikki edit 14</div>
           </div>
 
@@ -1068,6 +1076,40 @@
             <div class="cmd-name">nikki today</div>
             <div class="cmd-desc">Displays a consolidated daily dashboard overview of notes created and reminders scheduled for today.</div>
             <div class="code-box">nikki today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Command Group: Date Navigation -->
+      <div class="cmd-group searchable-item" data-keywords="yesterday tomorrow date nlp natural language navigation day week">
+        <div class="cmd-group-header" onclick="toggleCmdGroup(this)">
+          <h3><i class="fa-solid fa-calendar-days" style="color: var(--cyber-teal);"></i> Date Navigation</h3>
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </div>
+        <div class="cmd-group-body">
+          <div class="cmd-item">
+            <div class="cmd-name">nikki yesterday</div>
+            <div class="cmd-desc">Show yesterday's notes and reminders in the same rich summary format as <code>nikki today</code>.</div>
+            <div class="code-box">nikki yesterday</div>
+          </div>
+
+          <div class="cmd-item">
+            <div class="cmd-name">nikki tomorrow</div>
+            <div class="cmd-desc">Show tomorrow's notes and upcoming reminders.</div>
+            <div class="code-box">nikki tomorrow</div>
+          </div>
+
+          <div class="cmd-item">
+            <div class="cmd-name">nikki date &lt;when&gt;</div>
+            <div class="cmd-desc">Show notes and reminders for any calendar day using <strong>natural language date parsing</strong> powered by <code>chrono-node</code>. Works with past and future dates.</div>
+            <div class="code-box">nikki date "last friday"<br>nikki date "next monday"<br>nikki date "Aug 25"<br>nikki date "2 days ago"</div>
+          </div>
+
+          <div class="cmd-item">
+            <div class="cmd-desc" style="font-weight: 600; color: var(--text-main); margin-top: 1rem;">Natural Language Date Examples Supported:</div>
+            <ul style="list-style: disc; margin-left: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+              <code>"yesterday"</code> | <code>"tomorrow"</code> | <code>"last friday"</code> | <code>"next monday"</code> | <code>"2 days ago"</code> | <code>"Aug 25"</code> | <code>"September 1"</code>
+            </ul>
           </div>
         </div>
       </div>
@@ -1194,10 +1236,11 @@
       </div>
 
       <div class="roadmap-grid">
+        <div class="roadmap-item" style="color: var(--emerald-green); border-color: rgba(16,185,129,0.3);"><i class="fa-solid fa-check" style="color: var(--emerald-green);"></i> Optional Note Titles &amp; Title Search</div>
+        <div class="roadmap-item" style="color: var(--emerald-green); border-color: rgba(16,185,129,0.3);"><i class="fa-solid fa-check" style="color: var(--emerald-green);"></i> nikki yesterday / tomorrow / date &lt;nlp&gt;</div>
         <div class="roadmap-item"><i class="fa-regular fa-square"></i> Full-text SQLite search</div>
         <div class="roadmap-item"><i class="fa-regular fa-square"></i> Tags & Note Categorization</div>
         <div class="roadmap-item"><i class="fa-regular fa-square"></i> Note Linking & Backlinks</div>
-        <div class="roadmap-item"><i class="fa-regular fa-square"></i> nikki yesterday / nikki tomorrow</div>
         <div class="roadmap-item"><i class="fa-regular fa-square"></i> Recurring Reminders</div>
         <div class="roadmap-item"><i class="fa-regular fa-square"></i> Snooze Reminders via Notification</div>
         <div class="roadmap-item"><i class="fa-regular fa-square"></i> Notification Actions (Done / Snooze)</div>
@@ -1262,9 +1305,23 @@
         { type: 'cmd', text: 'nikki "check VPS prices" --remind "tomorrow 10am"' },
         { type: 'out', text: '✓ Note created #2\n✓ Reminder #1 created\n  8/18/2026, 10:00:00 AM', class: 'cli-success' }
       ],
+      title: [
+        { type: 'cmd', text: 'nikki "Migrate Postgres to RDS" --title "DevOps"' },
+        { type: 'out', text: '✓ Note created #5\n  Title: DevOps', class: 'cli-success' },
+        { type: 'cmd', text: 'nikki title 3 "Q3 Planning"' },
+        { type: 'out', text: '✓ Title set for note #3: "Q3 Planning"', class: 'cli-success' },
+        { type: 'cmd', text: 'nikki search "Q3"' },
+        { type: 'out', text: '#3 Q3 Planning — Meeting decisions for next quarter\n#5 DevOps — Migrate Postgres to RDS', class: 'cli-highlight' }
+      ],
       today: [
         { type: 'cmd', text: 'nikki today' },
-        { type: 'out', text: 'Today · Monday, August 17, 2026\n──────────────────────────────────────────────────\n\nNotes · 3\n10:12  #12 Learned about systemd user services\n11:32  #13 Need to improve reminder notifications\n14:05  #14 Idea: add Nikki mascot\n\nReminders · 2\n✓ 10:00  Check VPS prices\n  18:30  Work on CLI daemon\n──────────────────────────────────────────────────\n3 notes · 2 reminders', class: 'cli-highlight' }
+        { type: 'out', text: 'Today · Monday, August 17, 2026\n──────────────────────────────────────────────────\n\nNotes · 3\n10:12  #12 Learned about systemd user services\n11:32  #13 Q3 Planning — Meeting decisions for next quarter\n14:05  #14 DevOps — Migrate Postgres to RDS\n\nReminders · 2\n✓ 10:00  Check VPS prices\n  18:30  Work on CLI daemon\n──────────────────────────────────────────────────\n3 notes · 2 reminders', class: 'cli-highlight' }
+      ],
+      yesterday: [
+        { type: 'cmd', text: 'nikki yesterday' },
+        { type: 'out', text: 'Yesterday · Sunday, August 16, 2026\n──────────────────────────────────────────────────\n\nNotes · 2\n09:30  #10 Read about WAL mode in SQLite\n15:44  #11 Research — Look into chrono-node edge cases\n\nReminders · 1\n✓ 17:00  Submit weekly report\n──────────────────────────────────────────────────\n2 notes · 1 reminder', class: 'cli-highlight' },
+        { type: 'cmd', text: 'nikki date "last friday"' },
+        { type: 'out', text: 'last friday · Friday, August 14, 2026\n──────────────────────────────────────────────────\n\nNotes · 1\n11:00  #9 Setup — Configured systemd user service\n\nReminders · 0\nNo reminders this day.\n──────────────────────────────────────────────────\n1 note · 0 reminders', class: 'cli-highlight' }
       ],
       daemon: [
         { type: 'cmd', text: 'nikki daemon install' },

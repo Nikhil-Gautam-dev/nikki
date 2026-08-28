@@ -42,4 +42,21 @@ db.exec(`
     ON reminders(status);
 `);
 
+// Migration: add optional title column to existing databases.
+// ALTER TABLE ADD COLUMN errors if the column already exists in SQLite,
+// so we swallow that specific error.
+try {
+  db.exec(`ALTER TABLE notes ADD COLUMN title TEXT`);
+} catch {
+  // Column already exists — safe to ignore.
+}
+
+try {
+  db.exec(
+    `CREATE INDEX IF NOT EXISTS idx_notes_title ON notes(title)`,
+  );
+} catch {
+  // Index already exists — safe to ignore.
+}
+
 export default db;

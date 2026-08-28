@@ -122,8 +122,14 @@ export function completeReminder(id: number): boolean {
 }
 
 export function getTodayReminders(): Reminder[] {
-  const start = new Date();
+  return getRemindersForDay(new Date());
+}
 
+/**
+ * Return all reminders scheduled on the calendar day that contains `date`.
+ */
+export function getRemindersForDay(date: Date): Reminder[] {
+  const start = new Date(date);
   start.setHours(0, 0, 0, 0);
 
   const end = new Date(start);

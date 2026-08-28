@@ -2,12 +2,13 @@ import db from "../db.js";
 
 export interface Note {
   id: number;
+  title?: string | null;
   content: string;
   created_at: string;
   updated_at: string;
 }
 
-export function createNote(content: string): Note {
+export function createNote(content: string, title?: string): Note {
   const now = new Date().toISOString();
 
   const result = db
@@ -15,13 +16,14 @@ export function createNote(content: string): Note {
       `
       INSERT INTO notes (
         content,
+        title,
         created_at,
         updated_at
       )
-      VALUES (?, ?, ?)
+      VALUES (?, ?, ?, ?)
     `,
     )
-    .run(content, now, now);
+    .run(content, title ?? null, now, now);
 
   return db
     .prepare(
@@ -54,10 +56,11 @@ export function searchNotes(query: string): Note[] {
       SELECT *
       FROM notes
       WHERE content LIKE ?
+        OR title LIKE ?
       ORDER BY created_at DESC
     `,
     )
-    .all(`%${query}%`) as Note[];
+    .all(`%${query}%`, `%${query}%`) as Note[];
 }
 
 export function getNoteById(id: number): Note | undefined {
@@ -94,6 +97,35 @@ export function updateNote(id: number, content: string): Note | undefined {
   return getNoteById(id);
 }
 
+/**
+ * Set (or clear) the title of an existing note.
+ * Pass `null` or `undefined` to clear the title.
+ */
+export function updateNoteTitle(
+  id: number,
+  title: string | null | undefined,
+): Note | undefined {
+  const now = new Date().toISOString();
+
+  const result = db
+    .prepare(
+      `
+      UPDATE notes
+      SET
+        title = ?,
+        updated_at = ?
+      WHERE id = ?
+    `,
+    )
+    .run(title ?? null, now, id);
+
+  if (result.changes === 0) {
+    return undefined;
+  }
+
+  return getNoteById(id);
+}
+
 export function deleteNote(id: number): boolean {
   const result = db
     .prepare(
@@ -110,6 +142,19 @@ export function deleteNote(id: number): boolean {
 export function getTodayNotes(): Note[] {
   const start = new Date();
 
+  start.setHours(0, 0, 0, 0);
+
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+
+  return getNotesForDay(start);
+}
+
+/**
+ * Return all notes created on the calendar day that contains `date`.
+ */
+export function getNotesForDay(date: Date): Note[] {
+  const start = new Date(date);
   start.setHours(0, 0, 0, 0);
 
   const end = new Date(start);
