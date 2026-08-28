@@ -203,39 +203,6 @@
       transform: translateY(-2px);
     }
 
-    /* Search Bar in Header */
-    .doc-search-box {
-      position: relative;
-      width: 220px;
-    }
-
-    .doc-search-box input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      border-radius: 0.5rem;
-      padding: 0.45rem 0.75rem 0.45rem 2.2rem;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      outline: none;
-      transition: all 0.2s ease;
-    }
-
-    .doc-search-box input:focus {
-      border-color: var(--fox-orange);
-      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.25);
-      background: rgba(24, 16, 10, 0.95);
-      width: 260px;
-    }
-
-    .doc-search-box i {
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-dim);
-      font-size: 0.85rem;
-    }
 
     /* Hero Section */
     .hero {
@@ -948,10 +915,6 @@
       color: var(--fox-orange);
     }
 
-    .mobile-search-li {
-      display: none;
-      width: 100%;
-    }
 
     .terminal-top-row {
       display: flex;
@@ -1030,22 +993,6 @@
         display: flex;
       }
 
-      .mobile-search-li {
-        display: block;
-      }
-
-      .doc-search-box {
-        display: none;
-      }
-
-      .doc-search-box.mobile-search {
-        display: block;
-        width: 100%;
-      }
-
-      .doc-search-box.mobile-search input {
-        width: 100% !important;
-      }
 
       .nav-actions {
         gap: 0.5rem;
@@ -1185,19 +1132,9 @@
         <li><a href="#daemon">Daemon</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#roadmap">Roadmap</a></li>
-        <li class="mobile-search-li">
-          <div class="doc-search-box mobile-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="docSearchMobile" placeholder="Search docs..." oninput="filterDocs(this.value)">
-          </div>
-        </li>
       </ul>
 
       <div class="nav-actions">
-        <div class="doc-search-box">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="docSearch" placeholder="Search docs..." oninput="filterDocs(this.value)">
-        </div>
         <a href="https://github.com/Nikhil-Gautam-dev/nikki" target="_blank" class="btn btn-secondary">
           <i class="fa-brands fa-github"></i> <span class="btn-text-extra">GitHub</span>
         </a>
@@ -1922,21 +1859,6 @@
       });
     });
 
-    // Search Documentation Filter
-    function filterDocs(val) {
-      const query = (val !== undefined ? val : document.getElementById('docSearch').value).toLowerCase().trim();
-      const items = document.querySelectorAll('.searchable-item');
-
-      items.forEach(item => {
-        const text = (item.textContent + ' ' + (item.getAttribute('data-keywords') || '')).toLowerCase();
-        if (text.includes(query)) {
-          item.style.display = 'block';
-          item.classList.remove('collapsed');
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    }
   </script>
 </body>
 </html>
